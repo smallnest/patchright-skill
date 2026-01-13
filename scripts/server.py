@@ -101,6 +101,12 @@ class BrowserServer:
             return {"status": "error", "message": "No page open"}
         return {"status": "success", "title": await self.page.title()}
 
+    async def evaluate(self, script):
+        if not self.page:
+            return {"status": "error", "message": "No page open"}
+        result = await self.page.evaluate(script)
+        return {"status": "success", "result": result}
+
     async def handle_call(self, data):
         tool = data.get("tool")
         args = data.get("args", {})
@@ -115,6 +121,7 @@ class BrowserServer:
             "get_text": lambda: self.get_text(args["selector"]),
             "get_url": self.get_url,
             "get_title": self.get_title,
+            "evaluate": lambda: self.evaluate(args["script"]),
         }
 
         if tool not in handlers:
