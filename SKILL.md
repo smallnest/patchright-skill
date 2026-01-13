@@ -1,6 +1,12 @@
-# Playwright Undetected - Browser Automation Skill
+---
+name: patchright-skill
+description: Patchright-based browser automation with bot detection bypass. Use when Claude needs to interact with local web applications, test localhost/dev servers, take screenshots, or perform UI interactions on private networks. Ideal for QA automation, frontend debugging, E2E testing, and pre-deployment verification on local development environments.
+license: See LICENSE.txt
+---
 
-Patchright-based browser automation with bot detection bypass. Localhost, dev servers, web app testing, screenshots, UI interactions - all in one skill.
+# Patchright - Browser Automation Skill
+
+Patchright-based browser automation with bot detection bypass. Use for localhost, dev servers, web app testing, screenshots, and UI interactions.
 
 ## Triggers
 
@@ -37,27 +43,27 @@ Patchright-based browser automation with bot detection bypass. Localhost, dev se
 
 ## Core: Server Mode (Session Persistence!)
 
-**Problem**: executor.py terminates process on each call -> browser session lost
-**Solution**: server.py runs background server -> session persists
+**Problem**: scripts/executor.py terminates process on each call -> browser session lost
+**Solution**: scripts/server.py runs background server -> session persists
 
 ### Start Server (Required!)
 
 ```bash
-cd ~/.claude/skills/playwright-undetected
-python server.py start &
+cd ~/.claude/skills/patchright-skill
+python scripts/server.py start &
 ```
 
 ### Server Commands
 
 ```bash
 # Check status
-python server.py status
+python scripts/server.py status
 
 # Stop server
-python server.py stop
+python scripts/server.py stop
 
 # Call tool
-python server.py call '{"tool": "...", "args": {...}}'
+python scripts/server.py call '{"tool": "...", "args": {...}}'
 ```
 
 ## Usage
@@ -65,50 +71,50 @@ python server.py call '{"tool": "...", "args": {...}}'
 ### 1. Navigate + Screenshot (Most Common Pattern)
 
 ```bash
-cd ~/.claude/skills/playwright-undetected
+cd ~/.claude/skills/patchright-skill
 
 # Start server (if not running)
-python server.py start &
+python scripts/server.py start &
 sleep 2
 
 # Navigate to page
-python server.py call '{"tool": "navigate", "args": {"url": "http://localhost:3000"}}'
+python scripts/server.py call '{"tool": "navigate", "args": {"url": "http://localhost:3000"}}'
 
 # Take screenshot
-python server.py call '{"tool": "screenshot", "args": {"path": "screenshot.png", "full_page": true}}'
+python scripts/server.py call '{"tool": "screenshot", "args": {"path": "screenshot.png", "full_page": true}}'
 ```
 
 ### 2. Click + Interaction
 
 ```bash
 # Click element
-python server.py call '{"tool": "click", "args": {"selector": "button.submit"}}'
-python server.py call '{"tool": "click", "args": {"selector": "#menu-btn"}}'
-python server.py call '{"tool": "click", "args": {"selector": "body"}}'  # Click anywhere
+python scripts/server.py call '{"tool": "click", "args": {"selector": "button.submit"}}'
+python scripts/server.py call '{"tool": "click", "args": {"selector": "#menu-btn"}}'
+python scripts/server.py call '{"tool": "click", "args": {"selector": "body"}}'  # Click anywhere
 
 # Type text
-python server.py call '{"tool": "type", "args": {"selector": "#email", "text": "test@test.com"}}'
-python server.py call '{"tool": "type", "args": {"selector": "input[name=password]", "text": "password123"}}'
+python scripts/server.py call '{"tool": "type", "args": {"selector": "#email", "text": "test@test.com"}}'
+python scripts/server.py call '{"tool": "type", "args": {"selector": "input[name=password]", "text": "password123"}}'
 ```
 
 ### 3. Get Information
 
 ```bash
 # Current URL
-python server.py call '{"tool": "get_url"}'
+python scripts/server.py call '{"tool": "get_url"}'
 
 # Page title
-python server.py call '{"tool": "get_title"}'
+python scripts/server.py call '{"tool": "get_title"}'
 
 # Element text
-python server.py call '{"tool": "get_text", "args": {"selector": ".error-message"}}'
+python scripts/server.py call '{"tool": "get_text", "args": {"selector": ".error-message"}}'
 ```
 
 ### 4. Wait
 
 ```bash
 # Wait for element to appear
-python server.py call '{"tool": "wait_for", "args": {"selector": ".loading-complete", "timeout": 10000}}'
+python scripts/server.py call '{"tool": "wait_for", "args": {"selector": ".loading-complete", "timeout": 10000}}'
 ```
 
 ## Tool Reference
@@ -131,37 +137,37 @@ python server.py call '{"tool": "wait_for", "args": {"selector": ".loading-compl
 ### Login Test
 
 ```bash
-cd ~/.claude/skills/playwright-undetected
-python server.py start &
+cd ~/.claude/skills/patchright-skill
+python scripts/server.py start &
 sleep 2
 
 # Navigate to login page
-python server.py call '{"tool": "navigate", "args": {"url": "http://localhost:3000/login"}}'
-python server.py call '{"tool": "screenshot", "args": {"path": "login_page.png"}}'
+python scripts/server.py call '{"tool": "navigate", "args": {"url": "http://localhost:3000/login"}}'
+python scripts/server.py call '{"tool": "screenshot", "args": {"path": "login_page.png"}}'
 
 # Fill form
-python server.py call '{"tool": "type", "args": {"selector": "#email", "text": "admin@test.com"}}'
-python server.py call '{"tool": "type", "args": {"selector": "#password", "text": "admin123"}}'
-python server.py call '{"tool": "screenshot", "args": {"path": "login_filled.png"}}'
+python scripts/server.py call '{"tool": "type", "args": {"selector": "#email", "text": "admin@test.com"}}'
+python scripts/server.py call '{"tool": "type", "args": {"selector": "#password", "text": "admin123"}}'
+python scripts/server.py call '{"tool": "screenshot", "args": {"path": "login_filled.png"}}'
 
 # Submit
-python server.py call '{"tool": "click", "args": {"selector": "button[type=submit]"}}'
+python scripts/server.py call '{"tool": "click", "args": {"selector": "button[type=submit]"}}'
 sleep 2
-python server.py call '{"tool": "screenshot", "args": {"path": "login_result.png"}}'
+python scripts/server.py call '{"tool": "screenshot", "args": {"path": "login_result.png"}}'
 ```
 
 ### App Navigation
 
 ```bash
 # Enter app
-python server.py call '{"tool": "navigate", "args": {"url": "http://localhost:3000"}}'
-python server.py call '{"tool": "click", "args": {"selector": "body"}}'  # Click to enter
+python scripts/server.py call '{"tool": "navigate", "args": {"url": "http://localhost:3000"}}'
+python scripts/server.py call '{"tool": "click", "args": {"selector": "body"}}'  # Click to enter
 sleep 2
-python server.py call '{"tool": "screenshot", "args": {"path": "app_main.png", "full_page": true}}'
+python scripts/server.py call '{"tool": "screenshot", "args": {"path": "app_main.png", "full_page": true}}'
 
 # Explore features
-python server.py call '{"tool": "click", "args": {"selector": ".create-btn"}}'
-python server.py call '{"tool": "screenshot", "args": {"path": "after_action.png"}}'
+python scripts/server.py call '{"tool": "click", "args": {"selector": ".create-btn"}}'
+python scripts/server.py call '{"tool": "screenshot", "args": {"path": "after_action.png"}}'
 ```
 
 ## Selector Tips
@@ -201,7 +207,7 @@ form#login button[type=submit]
 
 **"Server not running" error:**
 ```bash
-python server.py start &
+python scripts/server.py start &
 sleep 2
 ```
 
@@ -210,7 +216,7 @@ sleep 2
 - In server mode, browser persists in background
 
 **Session disconnected:**
-- Use server.py instead of executor.py
+- Use scripts/server.py instead of scripts/executor.py
 - Server keeps session alive once started
 
 **Element not found:**
